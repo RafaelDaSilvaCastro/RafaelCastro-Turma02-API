@@ -59,6 +59,20 @@ describe('API Mercado', () => {
                 .expectStatus(StatusCodes.OK)
         }, 990000); 
 
+        it('Altera informações do mercado não cadastrado', async() =>{
+            await p
+                .spec()
+                .put(`${baseUrl}/-848484848484651681816`)
+                .withBody({
+                    "nome": `Mercado ${faker.number.bigInt()}`,
+                    "cnpj": "745632145896512",
+                    "endereco": 'Longe de mais'
+                })
+                .expectStatus(StatusCodes.NOT_FOUND)
+        }, 990000); 
+
+        
+
         it('Deleta mercado', async ()=>{
             await p
                 .spec()
@@ -76,8 +90,9 @@ describe('API Mercado', () => {
         it('Busca produtos do mercado pelo ID', async()=>{
             await p 
                 .spec()
-                .get(`${baseUrl}/5/produtos`)
+                .get(`${baseUrl}/1/produtos`)
                 .expectStatus(StatusCodes.OK)
+                .inspect()
         }, 990000); 
 
         it('Busca produtos do mercado pelo ID que não existe', async()=>{
@@ -86,5 +101,19 @@ describe('API Mercado', () => {
                 .get(`${baseUrl}/99999999999999/produtos`)
                 .expectStatus(StatusCodes.NOT_FOUND)
         }, 990000); 
+
+        it('Busca frutas do hortifruit do mercado', async()=>{
+            await p
+                .spec()
+                .get(`${baseUrl}/1/produtos/hortifruit/frutas`)
+                .expectStatus(StatusCodes.OK)
+        })
+
+        it('Busca frutas do hortifruit do mercado  que não existe', async()=>{
+            await p
+                .spec()
+                .get(`${baseUrl}/963116516111161168161/produtos/hortifruit/frutas`)
+                .expectStatus(StatusCodes.NOT_FOUND)
+        })        
     });
 });
